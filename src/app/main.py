@@ -3,6 +3,12 @@ from typing import Optional
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+import requests
+import time
+import datetime
+import sqlite3
+import commands
+
 app = FastAPI()
 
 app.add_middleware(
@@ -32,9 +38,27 @@ albums = [
 
 @app.get("/")
 def read_root():
+    do_http_req()
+    do_sql_http()
     return {"Azure Container Apps Python Sample API"}
 
 
 @app.get("/albums")
 def get_albums():
     return albums
+
+def do_http_req():
+  x = requests.get('https://datadoghq.com')
+
+def do_sql_http():
+  dbname = 'test.sqlite3'
+  conn = sqlite3.connect(dbname)
+  cursor = conn.cursor()
+  cursor.execute('SELECT * FROM ai_ops_poc where id = 1')
+  print(cursor.fetchone())
+  conn.close()
+
+  do_http_req2()
+
+def do_http_req2():
+  y = requests.get('http://172.31.28.18/server-status?auto')
